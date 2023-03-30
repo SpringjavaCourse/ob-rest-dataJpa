@@ -1,4 +1,4 @@
-package com.example.obrestdataJpa;
+package com.example.obrestdataJpa.entities;
 
 import jakarta.persistence.*;
 import org.springframework.expression.ConstructorResolver;

@@ -1,5 +1,7 @@
 package com.example.obrestdataJpa;
 
+import com.example.obrestdataJpa.entities.Book;
+import com.example.obrestdataJpa.repositories.BookRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
