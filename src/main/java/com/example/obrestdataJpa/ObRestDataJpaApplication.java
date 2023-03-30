@@ -27,7 +27,7 @@ public class ObRestDataJpaApplication {
 		// Recuperar todos los libros
 		System.out.println("Num libros en base de datos: " + repository.findAll().size());
 		// Borrar un libro
-		repository.deleteById(1L);
+		//repository.deleteById(1L);
 
 		System.out.println("Num libros en base de datos: " + repository.findAll().size());
 	}
