@@ -35,6 +35,15 @@ public class BookController {
 
 
     // Buscar un solo libro en BD segun su ID
+//    /**
+//     *
+//     * @param id
+//     * @return
+//     */
+//    public Book findOneById(Long id){
+//
+//
+//    }
 
     // Crear un nuevo libro en BD
 
