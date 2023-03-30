@@ -3,9 +3,11 @@ package com.example.obrestdataJpa.controller;
 import com.example.obrestdataJpa.entities.Book;
 import com.example.obrestdataJpa.repositories.BookRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class BookController {
@@ -35,15 +37,23 @@ public class BookController {
 
 
     // Buscar un solo libro en BD segun su ID
-//    /**
-//     *
-//     * @param id
-//     * @return
-//     */
-//    public Book findOneById(Long id){
-//
-//
-//    }
+    /**
+     * obtiene un libro especifico
+     * @param id id del libro deseado
+     * @return book libro deseado
+     */
+    @GetMapping("/api/books/{id}")
+    public Book findOneById(@PathVariable Long id){
+
+        Optional<Book> bookOpt =  bookRepository.findById(id);
+        // Option 1
+        if(bookOpt.isPresent()) // comprueba si el libro esta presente.
+            return bookOpt.get();
+        else
+            return  null;
+
+
+    }
 
     // Crear un nuevo libro en BD
 
