@@ -2,6 +2,7 @@ package com.example.obrestdataJpa.controller;
 
 import com.example.obrestdataJpa.entities.Book;
 import com.example.obrestdataJpa.repositories.BookRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,19 +44,20 @@ public class BookController {
      * @return book libro deseado
      */
     @GetMapping("/api/books/{id}")
-    public Book findOneById(@PathVariable Long id){
+    public ResponseEntity<Book> findOneById(@PathVariable Long id){
 
         Optional<Book> bookOpt =  bookRepository.findById(id);
         // comprueba si el libro esta presente.
 
         // Option 1
-//        if(bookOpt.isPresent()) // comprueba si el libro esta presente.
-//            return bookOpt.get();
-//        else
-//            return  null;
+        if(bookOpt.isPresent()) // comprueba si el libro esta presente.
+            return ResponseEntity.ok(bookOpt.get()); // envia el codigo OK 202
+        else
+            return ResponseEntity.notFound().build();// envia un error 404 Not found
 
         // Opcion 2
-        return bookOpt.orElse(null);
+        //return bookOpt.orElse(null);
+        //return bookOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 
 
     }
