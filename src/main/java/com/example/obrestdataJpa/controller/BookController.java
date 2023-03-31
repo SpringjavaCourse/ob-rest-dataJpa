@@ -46,11 +46,16 @@ public class BookController {
     public Book findOneById(@PathVariable Long id){
 
         Optional<Book> bookOpt =  bookRepository.findById(id);
+        // comprueba si el libro esta presente.
+
         // Option 1
-        if(bookOpt.isPresent()) // comprueba si el libro esta presente.
-            return bookOpt.get();
-        else
-            return  null;
+//        if(bookOpt.isPresent()) // comprueba si el libro esta presente.
+//            return bookOpt.get();
+//        else
+//            return  null;
+
+        // Opcion 2
+        return bookOpt.orElse(null);
 
 
     }
