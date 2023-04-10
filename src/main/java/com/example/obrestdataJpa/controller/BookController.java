@@ -2,6 +2,8 @@ package com.example.obrestdataJpa.controller;
 
 import com.example.obrestdataJpa.entities.Book;
 import com.example.obrestdataJpa.repositories.BookRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,8 @@ import java.util.Optional;
 
 @RestController
 public class BookController {
+
+    private final Logger log = LoggerFactory.getLogger(BookController.class); // Nos permite mostrar mensaje con colres, logs etc
 
     // Atributos
     private BookRepository bookRepository;
@@ -65,13 +69,29 @@ public class BookController {
      * @return
      */
     @PostMapping( "/api/books")
-    public Book create(@RequestBody Book book, @RequestHeader HttpHeaders headers){
+    public ResponseEntity<Book> create(@RequestBody Book book, @RequestHeader HttpHeaders headers){
         System.out.println(headers.get("User-Agent"));// obtiene el header UserAgent, quien nos envia la peticion.
         // guardar el libro recibido por parámetro en la base de datos
+        if(book.getId() != null){ // quiere decir que existe el id y por tanto no es una creación
+            log.warn("trying to create a book with id");//TODO: Nos porporciona mayor informacion
+            System.out.println("trying to create a book with id");
+            return ResponseEntity.badRequest().build();
+        }
+        Book result = bookRepository.save(book);// Se genera el libro devuelto con clave primaria
+        return ResponseEntity.ok(result);
+    }
+
+    /**
+     * Actualziar un libro existente en BD
+     * @param book
+     * @return
+     */
+    @PutMapping("/api/books")
+    public Book update(@RequestBody Book book){
+
         return bookRepository.save(book); // Se genera el libro devuelto con clave primaria
     }
 
-    // Actualziar un libro existente en BD
 
     // Borrar un libro en BD
 
