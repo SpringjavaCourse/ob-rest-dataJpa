@@ -26,3 +26,11 @@ El acceso se puede realizar desde Postman o Navegador.
    4. Actualizar un libro existente
    5. Borrar un libro
    6. Borrar todos los libros
+
+## Documentación API
+
+Se aplica los siguientes pasos para poder agregar la dependencia de swagger y asi documentar la api:
+1. Se accede al siguiente [LINK](https://mvnrepository.com/search?q=springfox-boot-starter).
+2. se ingresa **springfox-boot-starter**
+3. Descargamos la dependencia. 
+4. En el siguiente [LINK](https://springfox.github.io/springfox/docs/current/) detalla el paso a paso para la implementacion 
