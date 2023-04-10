@@ -104,5 +104,16 @@ public class BookController {
 
 
     // Borrar un libro en BD
+    @DeleteMapping("/api/books/{id}")
+    public ResponseEntity<Book> delete(@PathVariable Long id){
+
+        if(!bookRepository.existsById(id)){// NO ENCONTRADO
+            log.warn("trying to update a non existent book");
+            return ResponseEntity.notFound().build();
+        }
+
+        bookRepository.deleteById(id);
+        return  ResponseEntity.noContent().build();
+    }
 
 }
