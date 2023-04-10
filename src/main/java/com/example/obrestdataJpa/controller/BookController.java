@@ -103,7 +103,11 @@ public class BookController {
     }
 
 
-    // Borrar un libro en BD
+    /**
+     * Borrar un libro en BD
+     * @param id
+     * @return
+     */
     @DeleteMapping("/api/books/{id}")
     public ResponseEntity<Book> delete(@PathVariable Long id){
 
@@ -114,6 +118,15 @@ public class BookController {
 
         bookRepository.deleteById(id);
         return  ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/api/books")
+    public ResponseEntity<Book> deleteAll(){
+        log.info("REST Request for Delete all Books");
+
+        bookRepository.deleteAll();
+        return ResponseEntity.noContent().build();
+
     }
 
 }
