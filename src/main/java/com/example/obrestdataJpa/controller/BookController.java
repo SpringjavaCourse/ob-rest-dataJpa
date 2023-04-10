@@ -87,9 +87,19 @@ public class BookController {
      * @return
      */
     @PutMapping("/api/books")
-    public Book update(@RequestBody Book book){
+    public ResponseEntity<Book> update(@RequestBody Book book){
 
-        return bookRepository.save(book); // Se genera el libro devuelto con clave primaria
+        if(book.getId() == null){// si no tienen ID no es el metodo adecuado
+            log.warn("trying to update a non existent book");
+            return ResponseEntity.badRequest().build();// SE ESTA ENVIANDO MAL LA PETICION
+        }
+        if(!bookRepository.existsById(book.getId())){// NO ENCONTRADO
+            log.warn("trying to update a non existent book");
+            return ResponseEntity.notFound().build();
+        }
+
+        Book result = bookRepository.save(book);// Se genera el libro devuelto con clave primaria
+        return ResponseEntity.ok(result);
     }
 
 
