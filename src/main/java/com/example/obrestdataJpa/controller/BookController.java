@@ -17,15 +17,13 @@ public class BookController {
 
     // Constructores
     public BookController(BookRepository bookRepository) {
+
         this.bookRepository = bookRepository;
     }
 
 
-    // Crud sobre la entidad Book
-
-    // Buscar todos los libros
-
     /**
+     * Buscar todos los libros que hay en base de datos (ArrayList de libros)
      * http://localhost:8080/api/books
      * @return List<Book> Lista de libros
      */
@@ -36,16 +34,16 @@ public class BookController {
     }
 
 
-    // Buscar un solo libro en BD segun su ID
     /**
-     * obtiene un libro especifico
+     * http://localhost:8080/api/books/1...
+     * Buscar un solo libro en BD segun su ID
      * @param id id del libro deseado
      * @return book libro deseado
      */
     @GetMapping("/api/books/{id}")
     public ResponseEntity<Book> findOneById(@PathVariable Long id){
 
-        Optional<Book> bookOpt =  bookRepository.findById(id);
+        Optional<Book> bookOpt =  bookRepository.findById(id); // Optional, para no trabajar con el null
         // comprueba si el libro esta presente.
 
         // Option 1
@@ -54,17 +52,23 @@ public class BookController {
         else
             return ResponseEntity.notFound().build();// envia un error 404 Not found
 
-        // Opcion 2
+        // Opcion 2 programacion funcional
         //return bookOpt.orElse(null);
         //return bookOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Crear un nuevo libro en BD
+    /**
+     * Crear un nuevo libro en BD
+     * Metodo POST, no colisiona con findAll porque son diferentes metodos HTTP: GET vs POST
+     * @param book
+     * @param headers
+     * @return
+     */
     @PostMapping( "/api/books")
     public Book create(@RequestBody Book book, @RequestHeader HttpHeaders headers){
         System.out.println(headers.get("User-Agent"));// obtiene el header UserAgent, quien nos envia la peticion.
         // guardar el libro recibido por parámetro en la base de datos
-        return bookRepository.save(book);
+        return bookRepository.save(book); // Se genera el libro devuelto con clave primaria
     }
 
     // Actualziar un libro existente en BD
