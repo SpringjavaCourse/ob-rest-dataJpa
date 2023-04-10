@@ -2,6 +2,8 @@ package com.example.obrestdataJpa.controller;
 
 import com.example.obrestdataJpa.entities.Book;
 import com.example.obrestdataJpa.repositories.BookRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,20 +14,20 @@ import java.util.Optional;
 @RestController
 public class BookController {
 
+    private final Logger log = LoggerFactory.getLogger(BookController.class); // Nos permite mostrar mensaje con colres, logs etc
+
     // Atributos
     private BookRepository bookRepository;
 
     // Constructores
     public BookController(BookRepository bookRepository) {
+
         this.bookRepository = bookRepository;
     }
 
 
-    // Crud sobre la entidad Book
-
-    // Buscar todos los libros
-
     /**
+     * Buscar todos los libros que hay en base de datos (ArrayList de libros)
      * http://localhost:8080/api/books
      * @return List<Book> Lista de libros
      */
@@ -36,16 +38,16 @@ public class BookController {
     }
 
 
-    // Buscar un solo libro en BD segun su ID
     /**
-     * obtiene un libro especifico
+     * http://localhost:8080/api/books/1...
+     * Buscar un solo libro en BD segun su ID
      * @param id id del libro deseado
      * @return book libro deseado
      */
     @GetMapping("/api/books/{id}")
     public ResponseEntity<Book> findOneById(@PathVariable Long id){
 
-        Optional<Book> bookOpt =  bookRepository.findById(id);
+        Optional<Book> bookOpt =  bookRepository.findById(id); // Optional, para no trabajar con el null
         // comprueba si el libro esta presente.
 
         // Option 1
@@ -54,21 +56,77 @@ public class BookController {
         else
             return ResponseEntity.notFound().build();// envia un error 404 Not found
 
-        // Opcion 2
+        // Opcion 2 programacion funcional
         //return bookOpt.orElse(null);
         //return bookOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Crear un nuevo libro en BD
+    /**
+     * Crear un nuevo libro en BD
+     * Metodo POST, no colisiona con findAll porque son diferentes metodos HTTP: GET vs POST
+     * @param book
+     * @param headers
+     * @return
+     */
     @PostMapping( "/api/books")
-    public Book create(@RequestBody Book book, @RequestHeader HttpHeaders headers){
+    public ResponseEntity<Book> create(@RequestBody Book book, @RequestHeader HttpHeaders headers){
         System.out.println(headers.get("User-Agent"));// obtiene el header UserAgent, quien nos envia la peticion.
         // guardar el libro recibido por parámetro en la base de datos
-        return bookRepository.save(book);
+        if(book.getId() != null){ // quiere decir que existe el id y por tanto no es una creación
+            log.warn("trying to create a book with id");//TODO: Nos porporciona mayor informacion
+            System.out.println("trying to create a book with id");
+            return ResponseEntity.badRequest().build();
+        }
+        Book result = bookRepository.save(book);// Se genera el libro devuelto con clave primaria
+        return ResponseEntity.ok(result);
     }
 
-    // Actualziar un libro existente en BD
+    /**
+     * Actualziar un libro existente en BD
+     * @param book
+     * @return
+     */
+    @PutMapping("/api/books")
+    public ResponseEntity<Book> update(@RequestBody Book book){
 
-    // Borrar un libro en BD
+        if(book.getId() == null){// si no tienen ID no es el metodo adecuado
+            log.warn("trying to update a non existent book");
+            return ResponseEntity.badRequest().build();// SE ESTA ENVIANDO MAL LA PETICION
+        }
+        if(!bookRepository.existsById(book.getId())){// NO ENCONTRADO
+            log.warn("trying to update a non existent book");
+            return ResponseEntity.notFound().build();
+        }
+
+        Book result = bookRepository.save(book);// Se genera el libro devuelto con clave primaria
+        return ResponseEntity.ok(result);
+    }
+
+
+    /**
+     * Borrar un libro en BD
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/api/books/{id}")
+    public ResponseEntity<Book> delete(@PathVariable Long id){
+
+        if(!bookRepository.existsById(id)){// NO ENCONTRADO
+            log.warn("trying to update a non existent book");
+            return ResponseEntity.notFound().build();
+        }
+
+        bookRepository.deleteById(id);
+        return  ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/api/books")
+    public ResponseEntity<Book> deleteAll(){
+        log.info("REST Request for Delete all Books");
+
+        bookRepository.deleteAll();
+        return ResponseEntity.noContent().build();
+
+    }
 
 }
