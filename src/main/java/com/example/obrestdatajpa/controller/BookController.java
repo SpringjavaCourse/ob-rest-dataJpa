@@ -1,7 +1,7 @@
-package com.example.obrestdataJpa.controller;
+package com.example.obrestdatajpa.controller;
 
-import com.example.obrestdataJpa.entities.Book;
-import com.example.obrestdataJpa.repositories.BookRepository;
+import com.example.obrestdatajpa.entities.Book;
+import com.example.obrestdatajpa.repository.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;

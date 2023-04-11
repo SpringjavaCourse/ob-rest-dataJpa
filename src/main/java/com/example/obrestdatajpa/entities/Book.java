@@ -1,8 +1,9 @@
-package com.example.obrestdataJpa.entities;
+package com.example.obrestdatajpa.entities;
 
-import jakarta.persistence.*;
-import org.springframework.expression.ConstructorResolver;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
