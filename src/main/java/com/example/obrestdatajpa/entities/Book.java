@@ -8,15 +8,18 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "books")
+@ApiModel("Entidad libro para representar un elemento didactico compuesto por láminas de celulosa")
 public class Book {
 
     // Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Clave ficticia autoincremental tipo LOng")
     private Long id;
     private String title;
     private String author;
     private Integer pages;
+    @ApiModelProperty("Precio con rupias, con dos decimales utilizando '.' como separador")
     private Double price;
     private LocalDate releaseDate;
     private Boolean online;
