@@ -40,6 +40,7 @@ class BookControllerTest {
                 testRestTemplate.getForEntity("/hola",String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode()); // compara el codigo del estado de la peticion este en OK
+        assertEquals(200, response.getStatusCodeValue()); // verifica que el valor de codigo http sea 200
         assertEquals("Hola Mundo que tal vamos mundo, como va todo? Hasta Luego", response.getBody()); // compara el string recibido
     }
     @Test
@@ -58,6 +59,11 @@ class BookControllerTest {
 
     @Test
     void findOneById() {
+
+        ResponseEntity<Book> response = // Respuesta Http
+                testRestTemplate.getForEntity("/api/books/1",Book.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode()); // verifica la respuesta sea OK
     }
 
     @Test
