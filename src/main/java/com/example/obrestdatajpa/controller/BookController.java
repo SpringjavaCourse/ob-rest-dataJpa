@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Optional;
@@ -111,6 +112,7 @@ public class BookController {
      * @param id
      * @return
      */
+    @ApiIgnore// ignora este metodo para que no aparezca en la documentación de la api Swagger
     @DeleteMapping("/api/books/{id}")
     public ResponseEntity<Book> delete(@PathVariable Long id){
 
@@ -123,6 +125,7 @@ public class BookController {
         return  ResponseEntity.noContent().build();
     }
 
+    @ApiIgnore
     @DeleteMapping("/api/books")
     public ResponseEntity<Book> deleteAll(){
         log.info("REST Request for Delete all Books");
