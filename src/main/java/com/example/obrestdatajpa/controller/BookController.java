@@ -2,6 +2,8 @@ package com.example.obrestdatajpa.controller;
 
 import com.example.obrestdatajpa.entities.Book;
 import com.example.obrestdatajpa.repository.BookRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +47,8 @@ public class BookController {
      * @return book libro deseado
      */
     @GetMapping("/api/books/{id}")
-    public ResponseEntity<Book> findOneById(@PathVariable Long id){
+    @ApiOperation("Buscar un solo libro en BD segun su ID")
+    public ResponseEntity<Book> findOneById( @ApiParam("Clave primaria tipo Long") @PathVariable Long id){
 
         Optional<Book> bookOpt =  bookRepository.findById(id); // Optional, para no trabajar con el null
         // comprueba si el libro esta presente.
