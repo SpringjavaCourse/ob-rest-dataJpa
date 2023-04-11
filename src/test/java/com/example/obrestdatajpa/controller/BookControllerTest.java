@@ -8,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,5 +67,30 @@ class BookControllerTest {
 
     @Test
     void create() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        String json = """
+                {
+                    "title": "Libro creado desde Spring Test",
+                    "author": "Yuval Noah",
+                    "pages": 650,
+                    "price": 19.99,
+                    "releaseDate": "2019-12-01",
+                    "online": false
+                }
+                """;
+
+        HttpEntity<String> request = new HttpEntity<>(json,headers); // Simboliza la peticion
+        ResponseEntity<Book> response =
+                testRestTemplate.exchange("/api/books", HttpMethod.POST, request, Book.class);
+
+        Book result =  response.getBody();
+
+        assertEquals(1L,result.getId()); // verifica que contenga la ID 1
+        assertEquals("Libro creado desde Spring Test",result.getTitle()); // verifica que el titulo
+
     }
 }
